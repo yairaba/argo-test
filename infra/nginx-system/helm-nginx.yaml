@@ -32,3 +32,8 @@ spec:
         name: ingress-nginx
         namespace: nginx-system
       interval: 10m
+  values:
+    controller:
+        service:
+            enabled: true
+            loadBalancerIP: "185.81.157.58/32"
