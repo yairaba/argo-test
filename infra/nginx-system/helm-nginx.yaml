@@ -30,5 +30,5 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
-        namespace: flux-system
+        namespace: nginx-system
       interval: 10m
