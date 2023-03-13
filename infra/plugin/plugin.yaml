@@ -17,8 +17,7 @@ data:
     import json
     from http.server import BaseHTTPRequestHandler, HTTPServer
 
-    with open("/var/run/argo/token") as f:
-        token = f.read().strip()
+    token = "mon-secret"
 
 
     class Plugin(BaseHTTPRequestHandler):
