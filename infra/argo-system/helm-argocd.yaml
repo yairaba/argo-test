@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: argo-system
+spec: {}
+status: {}
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: argo-cd
+  namespace: argo-system
+spec:
+  interval: 60m
+  url: https://argoproj.github.io/argo-helm
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: argo-cd
+  namespace: argo-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: argo-cd
+      version: '5.26.0'
+      sourceRef:
+        kind: HelmRepository
+        name: argo-cd
+        namespace: argo-system
+      interval: 10m
+  values:
+    ## Server
+    server:
+      ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+          nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+          - argocd.inulogic.binboum.eu
+        tls:
+        - hosts:
+          - argocd.inulogic.binboum.eu
+          secretName: argocd.inulogic.binboum.eu-tls
+        https: true
