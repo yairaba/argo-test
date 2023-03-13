@@ -17,7 +17,7 @@ spec:
       requeueAfterSeconds: 30
   template:
     metadata:
-      name: 'feature-{{branch}}-{{number}}'
+      name: 'fb-{{branch}}-{{number}}'
     spec:
       source:
         repoURL: 'git@github.com:binboum/argo-test.git'
@@ -41,4 +41,4 @@ spec:
           - CreateNamespace=true
       destination:
         server: https://kubernetes.default.svc
-        namespace: 'feature-{{branch}}-{{number}}'
+        namespace: 'fb-{{branch}}-{{number}}'
