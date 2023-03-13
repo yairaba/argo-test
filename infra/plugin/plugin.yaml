@@ -1,0 +1,102 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: plugin
+spec: {}
+status: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: script-config
+  namespace: plugin
+data:
+  script.py: |
+    import json
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    with open("/var/run/argo/token") as f:
+        token = f.read().strip()
+
+
+    class Plugin(BaseHTTPRequestHandler):
+
+        def args(self):
+            return json.loads(self.rfile.read(int(self.headers.get('Content-Length'))))
+
+        def reply(self, reply):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(json.dumps(reply).encode("UTF-8"))
+
+        def forbidden(self):
+            self.send_response(403)
+            self.end_headers()
+
+        def unsupported(self):
+            self.send_response(404)
+            self.end_headers()
+
+        def do_POST(self):
+            if self.headers.get("Authorization") != "Bearer " + token:
+                self.forbidden()
+            elif self.path == '/api/v1/template.execute':
+                args = self.args()
+                if 'hello' in args['template'].get('plugin', {}):
+                    self.reply(
+                        {'node': {'phase': 'Succeeded', 'message': 'Hello template!',
+                                  'outputs': {'parameters': [{'name': 'foo', 'value': 'bar'}]}}})
+                else:
+                    self.reply({})
+            else:
+                self.unsupported()
+
+
+    if __name__ == '__main__':
+        httpd = HTTPServer(('', 8080), Plugin)
+        httpd.serve_forever()
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: script-deployment
+  namespace: plugin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: script-app
+  template:
+    metadata:
+      labels:
+        app: script-app
+    spec:
+      containers:
+        - name: script-container
+          image: python:3.9
+          command: [ "python", "/app/script.py" ]
+          volumeMounts:
+            - name: script-volume
+              mountPath: /app
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+      volumes:
+        - name: script-volume
+          configMap:
+            name: script-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: script-service
+spec:
+  selector:
+    app: script-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
