@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: app-client
+  namespace: argo-system
+spec:
+  generators:
+  - pullRequest:
+      github:
+        owner: binboum
+        repo: argo-test
+        labels:
+        - preview
+        tokenRef:
+          secretName: github-secret
+          key: token
+      requeueAfterSeconds: 30
+  template:
+    metadata:
+      name: 'feature-{{branch}}-{{number}}'
+    spec:
+      source:
+        repoURL: 'git@github.com:binboum/argo-test.git'
+        targetRevision: 'HEAD'
+        path: charts/app-client
+      helm:
+        releaseName: feature-{{branch}}-{{number}}
+        valueFiles:
+        - values.yaml
+        values: |
+          front:
+            image: nginx:latest
+          back:
+            image: nginx:latest
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'feature-{{branch}}-{{number}}'
