@@ -43,12 +43,9 @@ data:
                 self.forbidden()
             elif self.path == '/api/v1/template.execute':
                 args = self.args()
-                if 'hello' in args['template'].get('plugin', {}):
-                    self.reply(
-                        {'node': {'phase': 'Succeeded', 'message': 'Hello template!',
-                                  'outputs': {'parameters': [{'name': 'foo', 'value': 'bar'}]}}})
-                else:
-                    self.reply({})
+                self.reply(
+                    {'node': {'phase': 'Succeeded', 'message': 'Hello template!',
+                              'outputs': {'parameters': [{'name': 'foo', 'value': 'bar'}]}}})
             else:
                 self.unsupported()
 
