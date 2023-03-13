@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "app-client.fullname" . }}-front
   labels:
-    {{- include "app-client.labels" . | nindent 4 }}
+    {{- include "app-client.labels" . | nindent 4 }}-front
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
