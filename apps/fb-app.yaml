@@ -23,15 +23,15 @@ spec:
         repoURL: 'git@github.com:binboum/argo-test.git'
         targetRevision: 'HEAD'
         path: charts/app-client
-      helm:
-        releaseName: feature-{{branch}}-{{number}}
-        valueFiles:
-        - values.yaml
-        values: |
-          front:
-            image: nginx:latest
-          back:
-            image: nginx:latest
+        helm:
+          releaseName: feature-{{branch}}-{{number}}
+          valueFiles:
+          - values.yaml
+          values: |
+            front:
+              image: nginx:latest
+            back:
+              image: nginx:latest
       project: default
       syncPolicy:
         automated:
