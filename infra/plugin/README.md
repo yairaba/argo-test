@@ -2,8 +2,8 @@ curl --location --request POST 'http://localhost:8080/update' --header 'Content-
     "repoName": "myRepo",
     "branchName": "myBranch",
     "serviceData": {
-        "myService1": "myValue1",
-        "myService2": "myValue2",
+        "branch": "test",
+        "number": "1",
         "myService3": "myValue3"
     }
 

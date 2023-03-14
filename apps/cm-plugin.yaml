@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-plugin
+  namespace: argo-system
+data:
+  token: test
+  baseUrl: http://plugin.plugin.svc.cluster.local
