@@ -15,7 +15,7 @@ spec:
   #         secretName: github-secret
   #         key: token
   #     requeueAfterSeconds: 30
-    - remote:
+    - plugin:
         configMapRef: cm-plugin
         name: test
         params:
