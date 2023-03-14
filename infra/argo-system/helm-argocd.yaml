@@ -33,6 +33,12 @@ spec:
         namespace: argo-system
       interval: 10m
   values:
+    ## Globally shared configuration
+    global:
+      image:
+        repository: binboum/customappset
+        tag: "rc2"
+        imagePullPolicy: IfNotPresent
     ## Server
     server:
       ingress:
