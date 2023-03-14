@@ -19,8 +19,8 @@ spec:
         configMapRef: cm-plugin
         name: test
         params:
-          - repoName: myRepo
-            branchName: myBranch
+          repoName: myRepo
+          branchName: myBranch
         requeueAfterSeconds: 10
   template:
     metadata:
