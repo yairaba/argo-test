@@ -54,5 +54,5 @@ spec:
       ## ApplicationSet controller image
       image:
         repository: "binboum/customappset"
-        tag: "dev-rc1"
+        tag: "rc2"
         imagePullPolicy: "Always"
