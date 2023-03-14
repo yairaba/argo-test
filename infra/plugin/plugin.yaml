@@ -1,0 +1,102 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: plugin
+spec: {}
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plugin
+spec:
+  selector:
+    matchLabels:
+      app: plugin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: plugin
+    spec:
+      containers:
+        - name: app
+          image: docker.io/binboum/test-plugin:1
+          ports:
+            - containerPort: 80
+          env:
+            - name: REDIS_ADDR
+              value: plugin
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plugin
+  namespace: plugin
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: plugin.inulogic.binboum.eu
+    http:
+      paths:
+      - backend:
+          service:
+            name: plugin
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - plugin.inulogic.binboum.eu
+    secretName: plugin.inulogic.binboum.eu-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plugin
+spec:
+  selector:
+    app: plugin
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plugin
+spec:
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP
