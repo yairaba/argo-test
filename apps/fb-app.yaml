@@ -22,7 +22,9 @@ spec:
           repoName: myRepo
           branchName: myBranch
         requeueAfterSeconds: 10
-        template: {}
+        template:
+          metadata: {}
+          spec: {}
   template:
     metadata:
       name: 'fb-{{branch}}-{{number}}'
