@@ -22,7 +22,7 @@ metadata:
   name: argo-cd
   namespace: argo-system
 spec:
-  interval: 5m
+  interval: 3m
   install:
     crds: Skip
   upgrade:
