@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: fb-matrix
+  namespace: argo-system
+spec:
+  generators:
+    # - pullRequest:
+    #     github:
+    #       owner: binboum
+    #       repo: argo-test
+    #       labels:
+    #       - preview
+    #       tokenRef:
+    #         secretName: github-secret
+    #         key: token
+    #     requeueAfterSeconds: 30
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - repoName: my-repo
+                  branchName: my-branch
+                - repoName: your-repo
+                  branchName: your-branch
+          - list:
+              elements:
+                - tag: "test" # {{repoName}} is not replaced
+          # - plugin:
+          #     configMapRef: cm-pluginn
+          #     name: plugin-matrix
+          #     params:
+          #       repoName: "{{repoName}}"
+          #       branchName: "{{branchName}}"
+          #     requeueAfterSeconds: 10
+  template:
+    metadata:
+      name: "fb-matrix-{{repoName}}-{{branchName}}"
+    spec:
+      source:
+        repoURL: "git@github.com:binboum/argo-test.git"
+        targetRevision: "HEAD"
+        path: charts/app-client
+        helm:
+          releaseName: feature-test-matrix-{{repoName}}-{{branchName}}
+          valueFiles:
+            - values.yaml
+          values: |
+            front:
+              image: nginx:{{ tag }}
+            back:
+              image: nginx:latest
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "fb-test"

@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: fb-plugin
+  namespace: argo-system
+spec:
+  generators:
+    - plugin:
+        configMapRef: cm-plugin
+        name: plugin-plugin
+        params:
+          repoName: "my-repo"
+          branchName: "my-branch"
+        requeueAfterSeconds: 10
+  template:
+    metadata:
+      name: "fb-plugin-{{repoName}}-{{branchName}}"
+    spec:
+      source:
+        repoURL: "git@github.com:binboum/argo-test.git"
+        targetRevision: "HEAD"
+        path: charts/app-client
+        helm:
+          releaseName: feature-test-plugin-{{repoName}}-{{branchName}}
+          valueFiles:
+            - values.yaml
+          values: |
+            front:
+              image: nginx:{{ tag }}
+            back:
+              image: nginx:latest
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "fb-test"
