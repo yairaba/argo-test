@@ -24,19 +24,19 @@ spec:
         requeueAfterSeconds: 10
         template:
           metadata:
-            name: 'fb-{{branch}}-{{number}}'
+            name: 'fb-test'
           spec:
             source:
               repoURL: 'git@github.com:binboum/argo-test.git'
               targetRevision: 'HEAD'
               path: charts/app-client
               helm:
-                releaseName: feature-{{branch}}-{{number}}
+                releaseName: feature-test
                 valueFiles:
                 - values.yaml
                 values: |
                   front:
-                    image: nginx:latest
+                    image: nginx:{{ myService1 }}
                   back:
                     image: nginx:latest
             project: default
@@ -48,17 +48,17 @@ spec:
                 - CreateNamespace=true
             destination:
               server: https://kubernetes.default.svc
-              namespace: 'fb-{{branch}}-{{number}}'
+              namespace: 'fb-test'
   template:
     metadata:
-      name: 'fb-{{branch}}-{{number}}'
+      name: 'fb-test-test'
     spec:
       source:
         repoURL: 'git@github.com:binboum/argo-test.git'
         targetRevision: 'HEAD'
         path: charts/app-client
         helm:
-          releaseName: feature-{{branch}}-{{number}}
+          releaseName: feature-test
           valueFiles:
           - values.yaml
           values: |
