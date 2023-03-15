@@ -75,4 +75,4 @@ spec:
           - CreateNamespace=true
       destination:
         server: https://kubernetes.default.svc
-        namespace: 'fb-{{branch}}-{{number}}'
+        namespace: 'fb-test'
