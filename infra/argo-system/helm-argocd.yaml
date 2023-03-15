@@ -41,7 +41,7 @@ spec:
     global:
       image:
         repository: binboum/customappset
-        tag: "rc4"
+        tag: "rc5"
         imagePullPolicy: IfNotPresent
     ## Server
     server:
@@ -59,10 +59,3 @@ spec:
           - argocd.inulogic.binboum.eu
           secretName: argocd.inulogic.binboum.eu-tls
         https: true
-    ## ApplicationSet controller
-    applicationSet:
-      ## ApplicationSet controller image
-      image:
-        repository: "binboum/customappset"
-        tag: "rc4"
-        imagePullPolicy: "Always"
