@@ -23,6 +23,8 @@ metadata:
   namespace: argo-system
 spec:
   interval: 5m
+  upgrade:
+    crds: Skip
   chart:
     spec:
       chart: argo-cd
