@@ -23,8 +23,32 @@ spec:
           branchName: myBranch
         requeueAfterSeconds: 10
         template:
-          metadata: {}
-          spec: {}
+          metadata:
+            name: 'fb-{{branch}}-{{number}}'
+          spec:
+            source:
+              repoURL: 'git@github.com:binboum/argo-test.git'
+              targetRevision: 'HEAD'
+              path: charts/app-client
+              helm:
+                releaseName: feature-{{branch}}-{{number}}
+                valueFiles:
+                - values.yaml
+                values: |
+                  front:
+                    image: nginx:latest
+                  back:
+                    image: nginx:latest
+            project: default
+            syncPolicy:
+              automated:
+                prune: true
+                selfHeal: true
+              syncOptions:
+                - CreateNamespace=true
+            destination:
+              server: https://kubernetes.default.svc
+              namespace: 'fb-{{branch}}-{{number}}'
   template:
     metadata:
       name: 'fb-{{branch}}-{{number}}'
