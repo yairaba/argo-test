@@ -39,7 +39,7 @@ spec:
     global:
       image:
         repository: binboum/customappset
-        tag: "rc3"
+        tag: "rc4"
         imagePullPolicy: IfNotPresent
     ## Server
     server:
@@ -62,5 +62,5 @@ spec:
       ## ApplicationSet controller image
       image:
         repository: "binboum/customappset"
-        tag: "rc3"
+        tag: "rc4"
         imagePullPolicy: "Always"
