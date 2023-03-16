@@ -38,6 +38,7 @@ func main() {
 			BranchName  string      `json:"branchName"`
 			ServiceData ServiceData `json:"serviceData"`
 		}
+
 		err := json.NewDecoder(r.Body).Decode(&params)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -89,6 +90,20 @@ func main() {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+
+		fmt.Println("Incoming request to /api/v1/template.execute")
+		fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "Incoming request to /api/v1/template.execute")
+
+		// Print headers for debugging purposes
+		for name, values := range r.Header {
+			for _, value := range values {
+				fmt.Printf("%s: %s\n", name, value)
+			}
+		}
+
+		fmt.Printf("%+v\n", params)
+
+		fmt.Println("------------------------------------------")
 
 		if params.RepoName == "" || params.BranchName == "" {
 			http.Error(w, "Missing required parameters", http.StatusBadRequest)
