@@ -122,14 +122,16 @@ func main() {
 			keys = []string{key}
 		}
 
-		var dataMaps []map[string]string
+		dataMaps := make([]map[string]string, 0)
 		for _, key := range keys {
 			data, err := client.HGetAll(context.Background(), key).Result()
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			dataMaps = append(dataMaps, data)
+			if len(data) > 0 {
+				dataMaps = append(dataMaps, data)
+			}
 		}
 
 		jsonData, err := json.Marshal(dataMaps)
