@@ -85,6 +85,7 @@ func main() {
 			RepoName   string `json:"repoName"`
 			BranchName string `json:"branchName"`
 		}
+
 		err := json.NewDecoder(r.Body).Decode(&params)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -103,22 +104,35 @@ func main() {
 		fmt.Print("Request : \n", params)
 		fmt.Printf("%+v\n", params)
 
-		if params.RepoName == "" || params.BranchName == "" {
-			http.Error(w, "Missing required parameters", http.StatusBadRequest)
+		if params.RepoName == "" {
+			http.Error(w, "Missing required parameter repoName", http.StatusBadRequest)
 			return
 		}
 
-		key := fmt.Sprintf("%s:%s", params.RepoName, params.BranchName)
-
-		data, err := client.HGetAll(context.Background(), key).Result()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+		var keys []string
+		if params.BranchName == "" {
+			redisKeys, err := client.Keys(context.Background(), fmt.Sprintf("%s:*", params.RepoName)).Result()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			keys = redisKeys
+		} else {
+			key := fmt.Sprintf("%s:%s", params.RepoName, params.BranchName)
+			keys = []string{key}
 		}
 
-		// serviceData := ServiceData(data)
+		var dataMaps []map[string]string
+		for _, key := range keys {
+			data, err := client.HGetAll(context.Background(), key).Result()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			dataMaps = append(dataMaps, data)
+		}
 
-		jsonData, err := json.Marshal([]map[string]string{data})
+		jsonData, err := json.Marshal(dataMaps)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -128,7 +142,7 @@ func main() {
 		w.Write(jsonData)
 
 		fmt.Print("Response : \n", params)
-		fmt.Printf("%+v\n", data)
+		fmt.Printf("%+v\n", dataMaps)
 		fmt.Println("------------------------------------------")
 	})
 
