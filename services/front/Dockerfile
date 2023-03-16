@@ -1,3 +1,3 @@
 FROM nginx:latest
 
-echo "1"
+RUN echo "1"
