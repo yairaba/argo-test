@@ -20,10 +20,10 @@ spec:
           - list:
               elements:
                 - repoName: "test-seb"
-                - branchName: "haha"
           - list:
               elements:
                 - tasoeur: '{{repoName}}'
+                - branchName: "haha"
           # - plugin:
           #     configMapRef: cm-pluginn
           #     name: plugin-matrix
