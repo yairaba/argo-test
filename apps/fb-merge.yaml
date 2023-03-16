@@ -20,8 +20,7 @@ spec:
             configMapRef: cm-plugin
             name: plugin-merge
             params: # plugin should returns all existing keys without param
-              repoName: my-repo 
-              branchName: my-branch
+              repoName: my-repo
             requeueAfterSeconds: 10
   template:
     metadata:
