@@ -20,11 +20,15 @@ spec:
         generators:
           - list:
               elements:
-                - repoName: "test-seb"
-                - branchName: "haha"
+                - repoName: my-repo
+                  branchName: my-branch
+                  tagFromGen: my-test
+                - repoName: your-repo
+                  branchName: your-branch
+                  tagFromGen: your-test
           - list:
               elements:
-                - repoName: '{{.repoName}}'
+                - tag: '{{ .tagFromGen }}'
           # - plugin:
           #     configMapRef: cm-pluginn
           #     name: plugin-matrix
