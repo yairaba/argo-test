@@ -27,7 +27,7 @@ spec:
                   tagFromGen: your-test
           - list:
               elements:
-                - tag: '{{tagFromGen}}'
+                - tag: '{{ tagFromGen }}'
           # - plugin:
           #     configMapRef: cm-pluginn
           #     name: plugin-matrix
