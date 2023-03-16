@@ -30,8 +30,8 @@ spec:
               configMapRef: cm-plugin
               name: plugin-matrix
               params:
-                repoName: "{{repoName}}"
-                branchName: "{{branchName}}"
+                repoName: "{{.repoName}}"
+                branchName: "{{.branchName}}"
               requeueAfterSeconds: 10
   template:
     metadata:
