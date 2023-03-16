@@ -20,9 +20,10 @@ spec:
           - list:
               elements:
                 - repoName: "test-seb"
+                - branchName: "haha"
           - list:
               elements:
-                - repoName: '{{repoName}}'
+                - tasoeur: '{{repoName}}'
           # - plugin:
           #     configMapRef: cm-pluginn
           #     name: plugin-matrix
@@ -32,7 +33,7 @@ spec:
           #     requeueAfterSeconds: 10
   template:
     metadata:
-      name: "fb-matrix-{{repoName}}-{{branchName}}"
+      name: "fb-matrix-{{tasoeur}}-{{branchName}}"
     spec:
       source:
         repoURL: "git@github.com:binboum/argo-test.git"
