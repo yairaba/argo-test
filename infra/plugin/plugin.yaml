@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: docker.io/binboum/test-plugin:6
+          image: docker.io/binboum/test-plugin:7
           ports:
             - containerPort: 80
           env:
