@@ -14,3 +14,7 @@ Insert
 ```
 curl -X POST -H "Content-Type: application/json" -d '{"repoName": "my-repo", "branchName": "my-branch-aaa", "serviceData": {"tag1": "nginx-aaa", "tag2": "mariadb-aaa"}}' https://plugin.inulogic.binboum.eu/update
 ```
+
+```
+curl -X POST -H "Content-Type: application/json" -d '{"repoName": "my-repo", "branchName": "my-branch-bbb", "serviceData": {"tag1": "nginx-bbb", "tag2": "mariadb-bbb"}}' https://plugin.inulogic.binboum.eu/update
+```
