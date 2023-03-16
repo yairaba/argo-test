@@ -1,0 +1,26 @@
+name: Build and push Docker image with Kaniko
+on:
+  push:
+    branches:
+      - 'FB-*'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Configure Docker daemon
+      uses: docker/setup-buildx-action@v1
+    - name: Build Docker image with Kaniko
+      uses: GoogleCloudPlatform/github-actions/kaniko@master
+      with:
+        context: ./services/app
+        destination: my-registry/my-image:latest
+    - name: Push Docker image to registry
+      uses: docker/login-action@v1
+      with:
+        registry: my-registry
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+      run: docker push registry.inulogic.binboum.eu/argo-test/front:dev
