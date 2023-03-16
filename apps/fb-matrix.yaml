@@ -27,8 +27,8 @@ spec:
               configMapRef: cm-plugin
               name: plugin-plugin
               params:
-                repoName: "{{ .repoName }}"
-                branchName: "{{ .branchName }}"
+                repoName: "myRepo"
+                branchName: "myBranch"
               requeueAfterSeconds: 10
           # - plugin:
           #     configMapRef: cm-pluginn
