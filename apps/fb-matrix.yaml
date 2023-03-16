@@ -12,7 +12,7 @@ spec:
     #       repo: argo-test
     #       labels:
     #       - preview
-    #       tokenRef:
+    #       tokenRef:branchName
     #         secretName: github-secret
     #         key: token
     #     requeueAfterSeconds: 30
@@ -21,10 +21,10 @@ spec:
           - list:
               elements:
                 - repoName: "test-seb"
+                - branchName: "haha"
           - list:
               elements:
                 - repoName: '{{.repoName}}'
-                - branchName: "haha"
           # - plugin:
           #     configMapRef: cm-pluginn
           #     name: plugin-matrix
