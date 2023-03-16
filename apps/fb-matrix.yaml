@@ -23,20 +23,16 @@ spec:
                 - repoName: my-repo
                   branchName: my-branch
                   tagFromGen: my-test
+                - repoName: your-repo
+                  branchName: your-branch
+                  tagFromGen: your-test
           - plugin:
-              configMapRef: cm-plugin
-              name: plugin-plugin
+              configMapRef: cm-pluginn
+              name: plugin-matrix
               params:
-                repoName: "myRepo"
-                branchName: "myBranch"
+                repoName: "{{repoName}}"
+                branchName: "{{branchName}}"
               requeueAfterSeconds: 10
-          # - plugin:
-          #     configMapRef: cm-pluginn
-          #     name: plugin-matrix
-          #     params:
-          #       repoName: "{{repoName}}"
-          #       branchName: "{{branchName}}"
-          #     requeueAfterSeconds: 10
   template:
     metadata:
       name: "fb-matrix-{{.repoName}}-{{.branchName}}"

@@ -26,6 +26,21 @@ Content-Type: application/json
 }
 
 ###
+POST https://plugin.inulogic.binboum.eu/update
+Content-Type: application/json
+
+{
+    "repoName": "{{ .repoName }}",
+    "branchName": "{{ .branchName }}",
+    "serviceData": {
+        "repoName": "my-repo",
+        "branchName": "my-branch",
+        "tag": "my-tag"
+    }
+}
+
+
+###
 POST https://plugin.inulogic.binboum.eu/api/v1/template.execute
 Content-Type: application/json
 
@@ -39,6 +54,6 @@ POST https://plugin.inulogic.binboum.eu/api/v1/template.execute
 Content-Type: application/json
 
 {
-    "repoName": "your-repo",
-    "branchName": "your-branch"
+    "repoName": "{{ .repoName }}",
+    "branchName": "{{ .branchName }}"
 }
