@@ -100,10 +100,8 @@ func main() {
 				fmt.Printf("%s: %s\n", name, value)
 			}
 		}
-
+		fmt.Print("Request : \n", params)
 		fmt.Printf("%+v\n", params)
-
-		fmt.Println("------------------------------------------")
 
 		if params.RepoName == "" || params.BranchName == "" {
 			http.Error(w, "Missing required parameters", http.StatusBadRequest)
@@ -128,6 +126,10 @@ func main() {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(jsonData)
+
+		fmt.Print("Response : \n", params)
+		fmt.Printf("%+v\n", data)
+		fmt.Println("------------------------------------------")
 	})
 
 	log.Fatal(http.ListenAndServe(":8080", r))
