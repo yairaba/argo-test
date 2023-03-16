@@ -23,9 +23,13 @@ spec:
                 - repoName: my-repo
                   branchName: my-branch
                   tagFromGen: my-test
-          - list:
-              elements:
-                - tag: '{{ .tagFromGen }}'
+          - plugin:
+              configMapRef: cm-plugin
+              name: plugin-plugin
+              params:
+                repoName: "{{ .repoName }}"
+                branchName: "{{ .branchName }}"
+              requeueAfterSeconds: 10
           # - plugin:
           #     configMapRef: cm-pluginn
           #     name: plugin-matrix
