@@ -23,9 +23,6 @@ spec:
                 - repoName: my-repo
                   branchName: my-branch
                   tagFromGen: my-test
-                - repoName: your-repo
-                  branchName: your-branch
-                  tagFromGen: your-test
           - list:
               elements:
                 - tag: '{{ .tagFromGen }}'
