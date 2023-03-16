@@ -22,7 +22,7 @@ spec:
                 - repoName: "test-seb"
           - list:
               elements:
-                - tasoeur: '{{repoName}}'
+                - repoName: '{{repoName}}'
                 - branchName: "haha"
           # - plugin:
           #     configMapRef: cm-pluginn
