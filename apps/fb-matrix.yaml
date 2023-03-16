@@ -27,7 +27,7 @@ spec:
                   branchName: your-branch
                   tagFromGen: your-test
           - plugin:
-              configMapRef: cm-pluginn
+              configMapRef: cm-plugin
               name: plugin-matrix
               params:
                 repoName: "{{repoName}}"
