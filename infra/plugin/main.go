@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sort"
+	"strconv"
 
 	// "strings"
 	"time"
@@ -51,6 +53,14 @@ func main() {
 		}
 
 		key := fmt.Sprintf("%s:%s", params.RepoName, params.BranchName)
+
+		id, err := client.Incr(context.Background(), "data:id").Result()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		params.ServiceData["id"] = strconv.FormatInt(id, 10)
 
 		data := make([]interface{}, 0, len(params.ServiceData)*2)
 		for k, v := range params.ServiceData {
@@ -133,6 +143,12 @@ func main() {
 				dataMaps = append(dataMaps, data)
 			}
 		}
+
+		sort.Slice(dataMaps, func(i, j int) bool {
+			idI, _ := strconv.Atoi(dataMaps[i]["id"])
+			idJ, _ := strconv.Atoi(dataMaps[j]["id"])
+			return idI < idJ
+		})
 
 		jsonData, err := json.Marshal(dataMaps)
 		if err != nil {
