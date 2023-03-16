@@ -4,6 +4,7 @@ metadata:
   name: fb-matrix
   namespace: argo-system
 spec:
+  goTemplate: true
   generators:
     # - pullRequest:
     #     github:
@@ -22,7 +23,7 @@ spec:
                 - repoName: "test-seb"
           - list:
               elements:
-                - repoName: '{{repoName}}'
+                - repoName: '{{.repoName}}'
                 - branchName: "haha"
           # - plugin:
           #     configMapRef: cm-pluginn
@@ -33,19 +34,19 @@ spec:
           #     requeueAfterSeconds: 10
   template:
     metadata:
-      name: "fb-matrix-{{tasoeur}}-{{branchName}}"
+      name: "fb-matrix-{{.repoName}}-{{.branchName}}"
     spec:
       source:
         repoURL: "git@github.com:binboum/argo-test.git"
         targetRevision: "HEAD"
         path: charts/app-client
         helm:
-          releaseName: feature-test-matrix-{{repoName}}-{{branchName}}
+          releaseName: feature-test-matrix-{{.repoName}}-{{.branchName}}
           valueFiles:
             - values.yaml
           values: |
             front:
-              image: nginx:{{ tag }}
+              image: nginx:{{ .tag }}
             back:
               image: nginx:latest
       project: default
