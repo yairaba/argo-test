@@ -22,10 +22,8 @@ spec:
               elements:
                 - repoName: my-repo
                   branchName: my-branch
-                  tagFromGen: my-test
                 - repoName: your-repo
                   branchName: your-branch
-                  tagFromGen: your-test
           - plugin:
               configMapRef: cm-plugin
               name: plugin-matrix
