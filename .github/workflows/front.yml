@@ -8,32 +8,26 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-    - name: Set output
-      id: vars
-      run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Kaniko build
-      uses: aevea/action-kaniko@master
-      id: build-and-push
-      with:
-        registry: registry.inulogic.binboum.eu
-        image: argo-test/front
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
-        cache: false
-        tag_with_latest: false
-        tag: ${{ steps.vars.outputs.short_ref }}
-        path: services/front
-        build_file: Dockerfile
-        debug: false
-    - name: Extract image digest
-      id: extract-digest
-      run: | 
-        LOG=$(echo "${{ steps.build-and-push.outputs.stdout }}")
-        if [[ $LOG =~ Pushed\s+(.+?)\s+@ ]]; then
-          echo "::set-output name=digest::${BASH_REMATCH[1]}"
-        fi
-    - name: REST API with curl
-      run: |
-        curl X POST -H "Content-Type: application/json" -d '{"repoName": "argo-test", "branchName": "${{ steps.vars.outputs.short_ref }}", "serviceData": {"digest-front": "${{ steps.extract-digest.outputs.digest }}"}}' https://plugin.inulogic.binboum.eu/update
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Docker login
+        uses: docker/login-action@v1
+        with:
+          registry: registry.inulogic.binboum.eu
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: services/front/
+          push: true
+          tags: registry.inulogic.binboum.eu/argo-test/front:${{ steps.vars.outputs.short_ref }}
+      - name: Get image digest
+        id: inspect-image
+        run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' registry.inulogic.binboum.eu/argo-test/front:${{ steps.vars.outputs.short_ref }} | cut -d'@' -f2)"
+      - name: REST API with curl
+        run: |
+          curl X POST -H "Content-Type: application/json" -d '{"repoName": "argo-test", "branchName": "${{ steps.vars.outputs.short_ref }}", "serviceData": {"digest-front": "${{ steps.inspect-image.outputs.digest }}"}}' https://plugin.inulogic.binboum.eu/update
