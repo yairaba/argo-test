@@ -5,6 +5,7 @@ on:
       - 'feature-*'
     paths:
       - 'services/back/**'
+      - 'fakefile'
 
 jobs:
   build-and-push:
