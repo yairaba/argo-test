@@ -6,48 +6,42 @@ metadata:
 spec:
   goTemplate: true
   generators:
-    # - pullRequest:
-    #     github:
-    #       owner: binboum
-    #       repo: argo-test
-    #       labels:
-    #       - preview
-    #       tokenRef:branchName
-    #         secretName: github-secret
-    #         key: token
-    #     requeueAfterSeconds: 30
     - matrix:
         generators:
-          - list:
-              elements:
-                - repoName: my-repo
-                  branchName: my-branch
-                - repoName: your-repo
-                  branchName: your-branch
+          - pullRequest:
+              github:
+                owner: binboum
+                repo: argo-test
+                labels:
+                - preview
+                tokenRef:
+                  secretName: github-secret
+                  key: token
+              requeueAfterSeconds: 30
           - plugin:
               configMapRef: cm-plugin
               name: plugin-matrix
               params:
-                repoName: "{{.repoName}}"
-                branchName: "{{.branchName}}"
+                repoName: "argo-test"
+                branchName: "{{.branch}}"
               requeueAfterSeconds: 10
   template:
     metadata:
-      name: "fb-matrix-{{.repoName}}-{{.branchName}}"
+      name: "fb-matrix-{{.branch}}"
     spec:
       source:
         repoURL: "git@github.com:binboum/argo-test.git"
         targetRevision: "HEAD"
         path: charts/app-client
         helm:
-          releaseName: feature-test-matrix-{{.repoName}}-{{.branchName}}
+          releaseName: feature-test-matrix-{{.branch}}
           valueFiles:
             - values.yaml
           values: |
             front:
-              image: nginx:{{ .tag }}
+              image: registry.inulogic.binboum.eu/argo-test/front:{{.branch}}@{{ .digestFront }}
             back:
-              image: nginx:latest
+              image: registry.inulogic.binboum.eu/argo-test/back:{{.branch}}@{{ .digestBack }}
       project: default
       syncPolicy:
         automated:
@@ -57,4 +51,4 @@ spec:
           - CreateNamespace=true
       destination:
         server: https://kubernetes.default.svc
-        namespace: "fb-test"
+        namespace: "{{.branch}}"
