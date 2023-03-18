@@ -15,12 +15,11 @@ import (
 )
 
 const (
-	username    = "binboum"
-	repository  = "argo-test"
-	numBranches = 10
-	prefix      = "feature-"
-	label       = "preview"
-	randLength  = 10
+	username   = "binboum"
+	repository = "argo-test"
+	prefix     = "feature-"
+	label      = "preview"
+	randLength = 10
 )
 
 func RandStringRunes(n int) string {
@@ -73,7 +72,7 @@ func createPullRequestWithLabel(client *github.Client, owner, repo, title, body,
 	return pr, nil
 }
 
-func createBranches(accessToken string) error {
+func createBranches(accessToken string, typelabel string, numberBranch int) error {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: accessToken})
 	tc := oauth2.NewClient(ctx, ts)
@@ -81,7 +80,7 @@ func createBranches(accessToken string) error {
 
 	rand.Seed(time.Now().UnixNano())
 
-	for i := 1; i <= numBranches; i++ {
+	for i := 1; i <= numberBranch; i++ {
 		randStr := RandStringRunes(randLength)
 		branchName := fmt.Sprintf("%s%s", prefix, randStr)
 		println(branchName)
@@ -112,7 +111,7 @@ func createBranches(accessToken string) error {
 
 		fmt.Printf("File %s committed to branch %s\n", "fake file", branchName)
 
-		pr, err := createPullRequestWithLabel(client, username, repository, branchName, "Feature Branch", branchName, "main", "preview")
+		pr, err := createPullRequestWithLabel(client, username, repository, branchName, "Feature Branch", branchName, "main", "preview-"+typelabel)
 		if err != nil {
 			fmt.Printf("%v\n", err)
 		}
@@ -180,10 +179,18 @@ func main() {
 
 	createFlag := flag.Bool("create", false, "Create branch")
 	deleteFlag := flag.Bool("delete", false, "Delete branches with prefix")
+	typePrFlag := flag.String("label", "", "Type of pr")
+	numberPrFlag := flag.Int("number", 1, "Number of pr")
+
 	flag.Parse()
 
+	if *typePrFlag == "" {
+		fmt.Println("label args required")
+		return
+	}
+
 	if *createFlag {
-		err := createBranches(accessToken)
+		err := createBranches(accessToken, *typePrFlag, *numberPrFlag)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

@@ -8,8 +8,8 @@ spec:
   generators:
     - merge:
         mergeKeys:
-          - repoName
-          - branchName
+          - repo
+          - branch
         generators:
           - pullRequest:
               github:
@@ -25,7 +25,7 @@ spec:
               configMapRef: cm-plugin
               name: plugin-merge
               params:
-                repoName: "argo-test"
+                repo: "argo-test"
               requeueAfterSeconds: 10
   template:
     metadata:
