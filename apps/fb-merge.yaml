@@ -4,43 +4,46 @@ metadata:
   name: fb-merge
   namespace: argo-system
 spec:
+  goTemplate: true
   generators:
     - merge:
         mergeKeys:
           - repoName
           - branchName
         generators:
-        - list:
-            elements:
-            - repoName: my-repo
-              branchName: my-branch
-            - repoName: my-repo
-              branchName: my-other-branch
-            - repoName: your-repo
-              branchName: your-branch
-        - plugin:
-            configMapRef: cm-plugin
-            name: plugin-merge
-            params: # plugin should returns all existing keys without param
-              repoName: my-repo
-            requeueAfterSeconds: 10
+          - pullRequest:
+              github:
+                owner: binboum
+                repo: argo-test
+                labels:
+                - preview
+                tokenRef:
+                  secretName: github-secret
+                  key: token
+              requeueAfterSeconds: 30
+          - plugin:
+              configMapRef: cm-plugin
+              name: plugin-merge
+              params:
+                repoName: "argo-test"
+              requeueAfterSeconds: 10
   template:
     metadata:
-      name: 'fb-merge-{{repoName}}-{{branchName}}'
+      name: 'fb-merge-{{.branch}}'
     spec:
       source:
         repoURL: 'git@github.com:binboum/argo-test.git'
         targetRevision: 'HEAD'
         path: charts/app-client
         helm:
-          releaseName: feature-test-merge-{{repoName}}-{{branchName}}
+          releaseName: feature-test-merge-{{.branch}}
           valueFiles:
-          - values.yaml
+            - values.yaml
           values: |
             front:
-              image: nginx:{{ tag }}
+              image: registry.inulogic.binboum.eu/argo-test/front:{{.branch}}@{{ .serviceData.digestFront }}
             back:
-              image: nginx:latest
+              image: registry.inulogic.binboum.eu/argo-test/back:{{.branch}}@{{ .serviceData.digestBack }}
       project: default
       syncPolicy:
         automated:
@@ -50,4 +53,4 @@ spec:
           - CreateNamespace=true
       destination:
         server: https://kubernetes.default.svc
-        namespace: 'fb-test'
+        namespace: "{{.branch}}"

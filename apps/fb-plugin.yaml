@@ -26,7 +26,7 @@ spec:
             - values.yaml
           values: |
             front:
-              image: nginx:{{ tag }}
+              image: nginx:{{serviceData.tag}}
             back:
               image: nginx:latest
       project: default

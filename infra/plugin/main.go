@@ -9,6 +9,7 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 
 	// "strings"
 	"time"
@@ -17,6 +18,11 @@ import (
 )
 
 type ServiceData map[string]string
+type ServiceDataWithKey struct {
+	RepoName    string      `json:"repoName"`
+	BranchName  string      `json:"branchName"`
+	ServiceData ServiceData `json:"serviceData"`
+}
 
 func main() {
 	redisAddr := os.Getenv("REDIS_ADDR")
@@ -35,11 +41,7 @@ func main() {
 	const expiration = 604800
 
 	r.HandleFunc("/update", func(w http.ResponseWriter, r *http.Request) {
-		var params struct {
-			RepoName    string      `json:"repoName"`
-			BranchName  string      `json:"branchName"`
-			ServiceData ServiceData `json:"serviceData"`
-		}
+		var params ServiceDataWithKey
 
 		err := json.NewDecoder(r.Body).Decode(&params)
 		if err != nil {
@@ -132,21 +134,29 @@ func main() {
 			keys = []string{key}
 		}
 
-		dataMaps := make([]map[string]string, 0)
+		dataMaps := make([]ServiceDataWithKey, 0)
 		for _, key := range keys {
-			data, err := client.HGetAll(context.Background(), key).Result()
+			serviceData, err := client.HGetAll(context.Background(), key).Result()
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			if len(data) > 0 {
+			if len(serviceData) > 0 {
+				splits := strings.Split(key, ":")
+
+				data := ServiceDataWithKey{
+					RepoName:    splits[0],
+					BranchName:  splits[1],
+					ServiceData: serviceData,
+				}
+
 				dataMaps = append(dataMaps, data)
 			}
 		}
 
 		sort.Slice(dataMaps, func(i, j int) bool {
-			idI, _ := strconv.Atoi(dataMaps[i]["id"])
-			idJ, _ := strconv.Atoi(dataMaps[j]["id"])
+			idI, _ := strconv.Atoi(dataMaps[i].ServiceData["id"])
+			idJ, _ := strconv.Atoi(dataMaps[j].ServiceData["id"])
 			return idI < idJ
 		})
 

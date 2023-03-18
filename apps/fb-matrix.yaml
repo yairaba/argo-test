@@ -39,9 +39,9 @@ spec:
             - values.yaml
           values: |
             front:
-              image: registry.inulogic.binboum.eu/argo-test/front:{{.branch}}@{{ .digestFront }}
+              image: registry.inulogic.binboum.eu/argo-test/front:{{.branch}}@{{ .serviceData.digestFront }}
             back:
-              image: registry.inulogic.binboum.eu/argo-test/back:{{.branch}}@{{ .digestBack }}
+              image: registry.inulogic.binboum.eu/argo-test/back:{{.branch}}@{{ .serviceData.digestBack }}
       project: default
       syncPolicy:
         automated:
