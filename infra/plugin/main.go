@@ -134,11 +134,11 @@ func main() {
 			keys = []string{key}
 		}
 
-		if len(keys) == 0 {
-			fmt.Println("Not found keys")
-			http.NotFound(w, r)
-			return
-		}
+		// if len(keys) == 0 {
+		// 	fmt.Println("Not found keys")
+		// 	http.NotFound(w, r)
+		// 	return
+		// }
 
 		dataMaps := make([]ServiceDataWithKey, 0)
 		for _, key := range keys {
@@ -157,11 +157,12 @@ func main() {
 				}
 
 				dataMaps = append(dataMaps, data)
-			} else {
-				fmt.Println("Not found serviceData")
-				http.NotFound(w, r)
-				return
 			}
+			// else {
+			// 	fmt.Println("Not found serviceData")
+			// 	http.NotFound(w, r)
+			// 	return
+			// }
 		}
 
 		sort.Slice(dataMaps, func(i, j int) bool {
