@@ -151,6 +151,9 @@ func main() {
 				}
 
 				dataMaps = append(dataMaps, data)
+			} else {
+				http.NotFound(w, r)
+				return
 			}
 		}
 
