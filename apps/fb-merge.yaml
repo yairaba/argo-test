@@ -8,7 +8,6 @@ spec:
   generators:
     - merge:
         mergeKeys:
-          - repo
           - branch
         generators:
           - pullRequest:
