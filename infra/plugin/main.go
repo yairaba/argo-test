@@ -19,8 +19,8 @@ import (
 
 type ServiceData map[string]string
 type ServiceDataWithKey struct {
-	RepoName    string      `json:"repoName"`
-	BranchName  string      `json:"branchName"`
+	RepoName    string      `json:"repo"`
+	BranchName  string      `json:"branch"`
 	ServiceData ServiceData `json:"serviceData"`
 }
 
@@ -94,8 +94,8 @@ func main() {
 		// }
 
 		var params struct {
-			RepoName   string `json:"repoName"`
-			BranchName string `json:"branchName"`
+			RepoName   string `json:"repo"`
+			BranchName string `json:"branch"`
 		}
 
 		err := json.NewDecoder(r.Body).Decode(&params)

@@ -22,8 +22,8 @@ spec:
               configMapRef: cm-plugin
               name: plugin-matrix
               params:
-                repoName: "argo-test"
-                branchName: "{{.branch}}"
+                repo: "argo-test"
+                branch: "{{.branch}}"
               requeueAfterSeconds: 10
   template:
     metadata:
