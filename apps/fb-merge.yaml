@@ -16,7 +16,7 @@ spec:
                 owner: binboum
                 repo: argo-test
                 labels:
-                - preview
+                - preview-merge
                 tokenRef:
                   secretName: github-secret
                   key: token

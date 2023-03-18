@@ -70,3 +70,11 @@ Content-Type: application/json
     "repoName": "your-repo",
     "branchName": "your-branch"
 }
+
+###
+POST https://plugin.inulogic.binboum.eu/api/v1/template.execute
+Content-Type: application/json
+
+{
+    "repoName": "argo-test"
+}
