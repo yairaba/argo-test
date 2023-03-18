@@ -184,7 +184,7 @@ func main() {
 
 	flag.Parse()
 
-	if *typePrFlag == "" {
+	if *typePrFlag == "" && *createFlag {
 		fmt.Println("label args required")
 		return
 	}
