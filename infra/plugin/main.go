@@ -134,6 +134,12 @@ func main() {
 			keys = []string{key}
 		}
 
+		if len(keys) == 0 {
+			fmt.Println("Not found keys")
+			http.NotFound(w, r)
+			return
+		}
+
 		dataMaps := make([]ServiceDataWithKey, 0)
 		for _, key := range keys {
 			serviceData, err := client.HGetAll(context.Background(), key).Result()
@@ -152,6 +158,7 @@ func main() {
 
 				dataMaps = append(dataMaps, data)
 			} else {
+				fmt.Println("Not found serviceData")
 				http.NotFound(w, r)
 				return
 			}
