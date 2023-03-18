@@ -9,19 +9,19 @@ spec:
         configMapRef: cm-plugin
         name: plugin-plugin
         params:
-          repoName: "my-repo"
-          branchName: "my-branch"
+          repo: "my-repo"
+          branch: "my-branch"
         requeueAfterSeconds: 10
   template:
     metadata:
-      name: "fb-plugin-{{repoName}}-{{branchName}}"
+      name: "fb-plugin-{{repo}}-{{branch}}"
     spec:
       source:
         repoURL: "git@github.com:binboum/argo-test.git"
         targetRevision: "HEAD"
         path: charts/app-client
         helm:
-          releaseName: feature-test-plugin-{{repoName}}-{{branchName}}
+          releaseName: feature-test-plugin-{{repo}}-{{branch}}
           valueFiles:
             - values.yaml
           values: |

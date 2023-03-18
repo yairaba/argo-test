@@ -2,11 +2,11 @@ POST https://plugin.inulogic.binboum.eu/update
 Content-Type: application/json
 
 {
-    "repoName": "my-repo",
-    "branchName": "my-branch",
+    "repo": "my-repo",
+    "branch": "my-branch",
     "serviceData": {
-        "repoName": "my-repo",
-        "branchName": "my-branch",
+        "repo": "my-repo",
+        "branch": "my-branch",
         "tag": "my-tag"
     }
 }
@@ -16,11 +16,11 @@ POST https://plugin.inulogic.binboum.eu/update
 Content-Type: application/json
 
 {
-    "repoName": "my-repo",
-    "branchName": "my-other-branch",
+    "repo": "my-repo",
+    "branch": "my-other-branch",
     "serviceData": {
-        "repoName": "my-repo",
-        "branchName": "my-other-branch",
+        "repo": "my-repo",
+        "branch": "my-other-branch",
         "tag": "my-other-tag"
     }
 }
@@ -30,11 +30,11 @@ POST https://plugin.inulogic.binboum.eu/update
 Content-Type: application/json
 
 {
-    "repoName": "your-repo",
-    "branchName": "your-branch",
+    "repo": "your-repo",
+    "branch": "your-branch",
     "serviceData": {
-        "repoName": "your-repo",
-        "branchName": "your-branch",
+        "repo": "your-repo",
+        "branch": "your-branch",
         "tag": "your-tag"
     }
 }
@@ -44,11 +44,11 @@ POST https://plugin.inulogic.binboum.eu/update
 Content-Type: application/json
 
 {
-    "repoName": "{{ .repoName }}",
-    "branchName": "{{ .branchName }}",
+    "repo": "{{ .repo }}",
+    "branch": "{{ .branch }}",
     "serviceData": {
-        "repoName": "my-repo",
-        "branchName": "my-branch",
+        "repo": "my-repo",
+        "branch": "my-branch",
         "tag": "my-tag"
     }
 }
@@ -59,7 +59,7 @@ POST https://plugin.inulogic.binboum.eu/api/v1/template.execute
 Content-Type: application/json
 
 {
-    "repoName": "my-repo"
+    "repo": "my-repo"
 }
 
 ###
@@ -67,8 +67,8 @@ POST https://plugin.inulogic.binboum.eu/api/v1/template.execute
 Content-Type: application/json
 
 {
-    "repoName": "your-repo",
-    "branchName": "your-branch"
+    "repo": "your-repo",
+    "branch": "your-branch"
 }
 
 ###
@@ -76,5 +76,5 @@ POST https://plugin.inulogic.binboum.eu/api/v1/template.execute
 Content-Type: application/json
 
 {
-    "repoName": "argo-test"
+    "repo": "argo-test"
 }
