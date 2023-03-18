@@ -19,8 +19,8 @@ import (
 
 type ServiceData map[string]string
 type ServiceDataWithKey struct {
-	RepoName    string      `json:"repo"`
-	BranchName  string      `json:"branch"`
+	Repo        string      `json:"repo"`
+	Branch      string      `json:"branch"`
 	ServiceData ServiceData `json:"serviceData"`
 }
 
@@ -49,12 +49,12 @@ func main() {
 			return
 		}
 
-		if params.RepoName == "" || params.BranchName == "" || len(params.ServiceData) == 0 {
+		if params.Repo == "" || params.Branch == "" || len(params.ServiceData) == 0 {
 			http.Error(w, "Missing required parameters", http.StatusBadRequest)
 			return
 		}
 
-		key := fmt.Sprintf("%s:%s", params.RepoName, params.BranchName)
+		key := fmt.Sprintf("%s:%s", params.Repo, params.Branch)
 
 		id, err := client.Incr(context.Background(), "data:id").Result()
 		if err != nil {
@@ -94,8 +94,8 @@ func main() {
 		// }
 
 		var params struct {
-			RepoName   string `json:"repo"`
-			BranchName string `json:"branch"`
+			Repo   string `json:"repo"`
+			Branch string `json:"branch"`
 		}
 
 		err := json.NewDecoder(r.Body).Decode(&params)
@@ -116,21 +116,21 @@ func main() {
 		fmt.Print("Request : \n", params)
 		fmt.Printf("%+v\n", params)
 
-		if params.RepoName == "" {
-			http.Error(w, "Missing required parameter repoName", http.StatusBadRequest)
+		if params.Repo == "" {
+			http.Error(w, "Missing required parameter repo", http.StatusBadRequest)
 			return
 		}
 
 		var keys []string
-		if params.BranchName == "" {
-			redisKeys, err := client.Keys(context.Background(), fmt.Sprintf("%s:*", params.RepoName)).Result()
+		if params.Branch == "" {
+			redisKeys, err := client.Keys(context.Background(), fmt.Sprintf("%s:*", params.Repo)).Result()
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 			keys = redisKeys
 		} else {
-			key := fmt.Sprintf("%s:%s", params.RepoName, params.BranchName)
+			key := fmt.Sprintf("%s:%s", params.Repo, params.Branch)
 			keys = []string{key}
 		}
 
@@ -145,8 +145,8 @@ func main() {
 				splits := strings.Split(key, ":")
 
 				data := ServiceDataWithKey{
-					RepoName:    splits[0],
-					BranchName:  splits[1],
+					Repo:        splits[0],
+					Branch:      splits[1],
 					ServiceData: serviceData,
 				}
 
