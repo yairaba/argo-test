@@ -4,5 +4,5 @@ metadata:
   name: cm-plugin
   namespace: argo-system
 data:
-  token: test
+  token: $plugin.fb-plugin
   baseUrl: http://plugin.plugin.svc.cluster.local
