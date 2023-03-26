@@ -84,7 +84,7 @@ func main() {
 		fmt.Fprintf(w, "Successfully updated Redis with key %s", key)
 	})
 
-	r.HandleFunc("/api/v1/template.execute", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/api/v1/getparams.execute", func(w http.ResponseWriter, r *http.Request) {
 
 		// authHeader := r.Header.Get("Authorization")
 		// expectedToken := "my-secret-token"
@@ -104,8 +104,8 @@ func main() {
 			return
 		}
 
-		fmt.Println("Incoming request to /api/v1/template.execute")
-		fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "Incoming request to /api/v1/template.execute")
+		fmt.Println("Incoming request to /api/v1/getparams.execute")
+		fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "Incoming request to /api/v1/getparams.execute")
 
 		// Print headers for debugging purposes
 		for name, values := range r.Header {
