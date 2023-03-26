@@ -3845,6 +3845,8 @@ spec:
                                 x-kubernetes-preserve-unknown-fields: true
                               plugin:
                                 properties:
+                                  appendParamsToValues:
+                                    type: boolean
                                   configMapRef:
                                     type: string
                                   name:
@@ -7884,6 +7886,8 @@ spec:
                                 x-kubernetes-preserve-unknown-fields: true
                               plugin:
                                 properties:
+                                  appendParamsToValues:
+                                    type: boolean
                                   configMapRef:
                                     type: string
                                   name:
@@ -10018,6 +10022,8 @@ spec:
                       type: object
                     plugin:
                       properties:
+                        appendParamsToValues:
+                          type: boolean
                         configMapRef:
                           type: string
                         name:
