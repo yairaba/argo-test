@@ -41,7 +41,7 @@ spec:
     global:
       image:
         repository: binboum/customappset
-        tag: "rc8"
+        tag: "rc9"
         imagePullPolicy: IfNotPresent
     ## Server
     server:
