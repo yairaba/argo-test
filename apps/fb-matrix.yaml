@@ -19,8 +19,8 @@ spec:
                   key: token
               requeueAfterSeconds: 30
           - plugin:
-              configMapRef: cm-plugin
-              name: plugin-matrix
+              configMapRef: 
+                name:  cm-plugin
               parameters:
                 repo: "argo-test"
                 branch: "{{.branch}}"
