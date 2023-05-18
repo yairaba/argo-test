@@ -21,8 +21,8 @@ spec:
                   key: token
               requeueAfterSeconds: 30
           - plugin:
-              configMapRef: cm-plugin
-              name: plugin-merge
+              configMapRef: 
+                name:  cm-plugin
               parameters:
                 repo: "argo-test"
               requeueAfterSeconds: 10
