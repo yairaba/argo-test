@@ -6,9 +6,9 @@ metadata:
 spec:
   generators:
     - plugin:
-        configMapRef: cm-plugin
-        name: plugin-plugin
-        params:
+        configMapRef: 
+          name: cm-plugin
+        parameters:
           repo: "my-repo"
           branch: "my-branch"
         requeueAfterSeconds: 10
