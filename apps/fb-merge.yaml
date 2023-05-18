@@ -23,7 +23,7 @@ spec:
           - plugin:
               configMapRef: cm-plugin
               name: plugin-merge
-              params:
+              parameters:
                 repo: "argo-test"
               requeueAfterSeconds: 10
   template:
