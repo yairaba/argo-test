@@ -93,12 +93,23 @@ func main() {
 		// 	return
 		// }
 
-		var params struct {
+		type ParametersRequest struct {
 			Repo   string `json:"repo"`
 			Branch string `json:"branch"`
 		}
 
-		err := json.NewDecoder(r.Body).Decode(&params)
+		type PluginRequest struct {
+			ApplicationSetName string            `json:"applicationSetName"`
+			Parameters         ParametersRequest `json:"parameters"`
+		}
+
+		type PluginResponse struct {
+			Parameters []ServiceDataWithKey `json:"parameters"`
+		}
+
+		var pluginRequest PluginRequest
+
+		err := json.NewDecoder(r.Body).Decode(&pluginRequest)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -113,24 +124,24 @@ func main() {
 				fmt.Printf("%s: %s\n", name, value)
 			}
 		}
-		fmt.Print("Request : \n", params)
-		fmt.Printf("%+v\n", params)
+		fmt.Print("Request : \n", pluginRequest)
+		fmt.Printf("%+v\n", pluginRequest)
 
-		if params.Repo == "" {
+		if pluginRequest.Parameters.Repo == "" {
 			http.Error(w, "Missing required parameter repo", http.StatusBadRequest)
 			return
 		}
 
 		var keys []string
-		if params.Branch == "" {
-			redisKeys, err := client.Keys(context.Background(), fmt.Sprintf("%s:*", params.Repo)).Result()
+		if pluginRequest.Parameters.Branch == "" {
+			redisKeys, err := client.Keys(context.Background(), fmt.Sprintf("%s:*", pluginRequest.Parameters.Repo)).Result()
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 			keys = redisKeys
 		} else {
-			key := fmt.Sprintf("%s:%s", params.Repo, params.Branch)
+			key := fmt.Sprintf("%s:%s", pluginRequest.Parameters.Repo, pluginRequest.Parameters.Branch)
 			keys = []string{key}
 		}
 
@@ -171,7 +182,12 @@ func main() {
 			return idI < idJ
 		})
 
-		jsonData, err := json.Marshal(dataMaps)
+		response := PluginResponse{
+			Parameters: dataMaps,
+		}
+
+		jsonData, err := json.Marshal(response)
+
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -180,8 +196,8 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(jsonData)
 
-		fmt.Print("Response : \n", params)
-		fmt.Printf("%+v\n", dataMaps)
+		fmt.Print("Response : \n", pluginRequest)
+		fmt.Printf("%+v\n", response)
 		fmt.Println("------------------------------------------")
 	})
 
