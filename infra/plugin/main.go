@@ -100,11 +100,11 @@ func main() {
 
 		type PluginRequest struct {
 			ApplicationSetName string            `json:"applicationSetName"`
-			Parameters         ParametersRequest `json:"parameters"`
+			Parameters         ParametersRequest `json:"inputParameters"`
 		}
 
 		type PluginResponse struct {
-			Parameters []ServiceDataWithKey `json:"parameters"`
+			Parameters []ServiceDataWithKey `json:"outputParameters"`
 		}
 
 		var pluginRequest PluginRequest
