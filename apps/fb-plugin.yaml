@@ -11,7 +11,7 @@ spec:
         parameters:
           repo: "my-repo"
           branch: "my-branch"
-        requeueAfterSeconds: 10
+        requeueAfterSeconds: 86400
   template:
     metadata:
       name: "fb-plugin-{{repo}}-{{branch}}"
