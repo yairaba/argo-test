@@ -103,8 +103,15 @@ func main() {
 			Parameters         ParametersRequest `json:"inputParameters"`
 		}
 
+		type Output struct {
+			// Parameters is the list of parameter sets returned by the plugin.
+			Parameters []ServiceDataWithKey `json:"parameters"`
+		}
+
+		// ServiceResponse is the response object returned by the plugin service.
 		type PluginResponse struct {
-			Parameters []ServiceDataWithKey `json:"outputParameters"`
+			// Output is the map of outputs returned by the plugin.
+			Output Output `json:"output"`
 		}
 
 		var pluginRequest PluginRequest
@@ -183,7 +190,9 @@ func main() {
 		})
 
 		response := PluginResponse{
-			Parameters: dataMaps,
+			Output{
+				Parameters: dataMaps,
+			},
 		}
 
 		jsonData, err := json.Marshal(response)
