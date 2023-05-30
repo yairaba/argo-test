@@ -8,10 +8,10 @@ spec:
     - plugin:
         configMapRef: 
           name: cm-plugin
-          input:
-            parameters:
-              repo: "my-repo"
-          branch: "my-branch"
+        input:
+          parameters:
+            repo: "my-repo"
+            branch: "my-branch"
         requeueAfterSeconds: 86400
   template:
     metadata:
