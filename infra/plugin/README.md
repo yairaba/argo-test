@@ -1,12 +1,28 @@
 Filter Read :
 
 ```
-curl -X POST -H "Content-Type: application/json" -d '{ "applicationSetName": "fake-appset", "parameters": {"repo": "my-repo", "branch": "my-branch-aaa"}}' https://plugin.inulogic.binboum.eu/api/v1/getparams.execute
+curl -X POST -H "Content-Type: application/json" -d '{
+  "applicationSetName": "fake-appset",
+  "input": {
+    "parameters": {
+      "repo": "my-repo",
+      "branch": "my-branch-aaa"
+    }
+  }
+}' https://plugin.inulogic.binboum.eu/api/v1/getparams.execute
 ```
+
 All read :
 
 ```
-curl -X POST -H "Content-Type: application/json" -d '{ "applicationSetName": "fake-appset", "parameters": {"repo": "my-repo"}}' https://plugin.inulogic.binboum.eu/api/v1/getparams.execute
+curl -X POST -H "Content-Type: application/json" -d '{
+  "applicationSetName": "fake-appset",
+  "input": {
+    "parameters": {
+      "repo": "my-repo",
+    }
+  }
+}' https://plugin.inulogic.binboum.eu/api/v1/getparams.execute
 ```
 
 Insert

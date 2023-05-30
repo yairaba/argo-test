@@ -98,9 +98,13 @@ func main() {
 			Branch string `json:"branch"`
 		}
 
+		type Input struct {
+			Parameters ParametersRequest `json:"parameters"`
+		}
+
 		type PluginRequest struct {
-			ApplicationSetName string            `json:"applicationSetName"`
-			Parameters         ParametersRequest `json:"inputParameters"`
+			ApplicationSetName string `json:"applicationSetName"`
+			Input              Input  `json:"input"`
 		}
 
 		type Output struct {
@@ -134,21 +138,21 @@ func main() {
 		fmt.Print("Request : \n", pluginRequest)
 		fmt.Printf("%+v\n", pluginRequest)
 
-		if pluginRequest.Parameters.Repo == "" {
+		if pluginRequest.Input.Parameters.Repo == "" {
 			http.Error(w, "Missing required parameter repo", http.StatusBadRequest)
 			return
 		}
 
 		var keys []string
-		if pluginRequest.Parameters.Branch == "" {
-			redisKeys, err := client.Keys(context.Background(), fmt.Sprintf("%s:*", pluginRequest.Parameters.Repo)).Result()
+		if pluginRequest.Input.Parameters.Branch == "" {
+			redisKeys, err := client.Keys(context.Background(), fmt.Sprintf("%s:*", pluginRequest.Input.Parameters.Repo)).Result()
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 			keys = redisKeys
 		} else {
-			key := fmt.Sprintf("%s:%s", pluginRequest.Parameters.Repo, pluginRequest.Parameters.Branch)
+			key := fmt.Sprintf("%s:%s", pluginRequest.Input.Parameters.Repo, pluginRequest.Input.Parameters.Branch)
 			keys = []string{key}
 		}
 
