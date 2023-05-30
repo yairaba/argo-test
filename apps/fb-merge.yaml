@@ -23,8 +23,9 @@ spec:
           - plugin:
               configMapRef: 
                 name:  cm-plugin
-              inputParameters:
-                repo: "argo-test"
+              input:
+                parameters:
+                  repo: "argo-test"
               requeueAfterSeconds: 10
   template:
     metadata:

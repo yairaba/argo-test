@@ -21,9 +21,10 @@ spec:
           - plugin:
               configMapRef: 
                 name:  cm-plugin
-              inputParameters:
-                repo: "argo-test"
-                branch: "{{.branch}}"
+              input:
+                parameters:
+                  repo: "argo-test"
+                  branch: "{{.branch}}"
               requeueAfterSeconds: 10
   template:
     metadata:
