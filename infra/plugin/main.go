@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -86,12 +87,19 @@ func main() {
 
 	r.HandleFunc("/api/v1/getparams.execute", func(w http.ResponseWriter, r *http.Request) {
 
-		// authHeader := r.Header.Get("Authorization")
-		// expectedToken := "my-secret-token"
-		// if !strings.HasPrefix(authHeader, "Bearer ") || authHeader[7:] != expectedToken {
-		// 	http.Error(w, "Unauthorized", http.StatusUnauthorized)
-		// 	return
-		// }
+		authHeader := r.Header.Get("Authorization")
+
+		contenu, err := ioutil.ReadFile("/var/run/argo/token")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		expectedToken := string(contenu)
+
+		if !strings.HasPrefix(authHeader, "Bearer ") || authHeader[7:] != expectedToken {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
 
 		type ParametersRequest struct {
 			Repo   string `json:"repo"`
@@ -120,7 +128,7 @@ func main() {
 
 		var pluginRequest PluginRequest
 
-		err := json.NewDecoder(r.Body).Decode(&pluginRequest)
+		err = json.NewDecoder(r.Body).Decode(&pluginRequest)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

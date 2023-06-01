@@ -7,6 +7,14 @@ metadata:
 spec: {}
 status: {}
 ---
+apiVersion: v1
+data:
+  token: Y291Y291
+kind: Secret
+metadata:
+  name: plugin
+  namespace: plugin
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,12 +32,20 @@ spec:
     spec:
       containers:
         - name: app
-          image: docker.io/binboum/test-plugin:21
+          image: docker.io/binboum/test-plugin:22
           ports:
             - containerPort: 80
           env:
             - name: REDIS_ADDR
               value: redis:6379
+          volumeMounts:
+            - mountPath: /var/run/argo/token
+              name: token
+              subPath: token
+      volumes:
+        - name: token
+          secret:
+            secretName: plugin
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
