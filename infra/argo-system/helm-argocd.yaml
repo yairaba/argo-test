@@ -60,8 +60,8 @@ spec:
           secretName: argocd.inulogic.binboum.eu-tls
         https: true
     configs:
-      url: https://argocd.inulogic.binboum.eu/
       cm:
+        url: https://argocd.inulogic.binboum.eu/
         oidc.config: |
           name: sso
           issuer: https://lemur-5.cloud-iam.com/auth/realms/test-max
