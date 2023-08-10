@@ -30,7 +30,7 @@ spec:
   chart:
     spec:
       chart: argo-cd
-      version: '5.26.0'
+      version: '5.43.3'
       sourceRef:
         kind: HelmRepository
         name: argo-cd
@@ -40,8 +40,8 @@ spec:
     ## Globally shared configuration
     global:
       image:
-        repository: binboum/customappset
-        tag: "rc17"
+        repository: quay.io/argoproj/argocd
+        tag: "v2.8.0"
         imagePullPolicy: IfNotPresent
     ## Server
     server:
