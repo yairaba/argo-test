@@ -33,4 +33,4 @@ jobs:
         run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' registry.inulogic.binboum.eu/argo-test/back:${{ steps.vars.outputs.short_ref }} | cut -d'@' -f2)"
       - name: REST API with curl
         run: |
-          curl X POST -H "Content-Type: application/json" -d '{"repo": "argo-test", "branch": "${{ steps.vars.outputs.short_ref }}", "serviceData": {"digestBack": "${{ steps.inspect-image.outputs.digest }}"}}' https://plugin.inulogic.binboum.eu/update
+          curl -X POST -H "Content-Type: application/json" -d '{"repo": "argo-test", "branch": "${{ steps.vars.outputs.short_ref }}", "serviceData": {"digestBack": "${{ steps.inspect-image.outputs.digest }}"}}' https://plugin.inulogic.binboum.eu/update
