@@ -14,9 +14,9 @@ spec:
                 repo: argo-test
                 labels:
                 - preview-matrix
-                # tokenRef:
-                #   secretName: github-secret
-                #   key: token
+                tokenRef:
+                  secretName: github-secret-test
+                  key: token
               requeueAfterSeconds: 30
           - plugin:
               configMapRef: 
