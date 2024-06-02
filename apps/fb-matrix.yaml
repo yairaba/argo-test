@@ -31,7 +31,7 @@ spec:
       name: "fb-matrix-{{.branch}}"
     spec:
       source:
-        repoURL: "git@github.com:binboum/argo-test.git"
+        repoURL: "git@github.com:yairaba/argo-test.git"
         targetRevision: "HEAD"
         path: charts/app-client
         helm:
@@ -51,5 +51,5 @@ spec:
         syncOptions:
           - CreateNamespace=true
       destination:
-        server: https://kubernetes.default.svc
-        namespace: "{{.branch}}"
+        name: in-cluster
+        namespace: 'pr-{{.branch}}'
