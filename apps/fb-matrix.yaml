@@ -10,13 +10,13 @@ spec:
         generators:
           - pullRequest:
               github:
-                owner: binboum
+                owner: yairaba
                 repo: argo-test
                 labels:
                 - preview-matrix
-                tokenRef:
-                  secretName: github-secret
-                  key: token
+                # tokenRef:
+                #   secretName: github-secret
+                #   key: token
               requeueAfterSeconds: 30
           - plugin:
               configMapRef: 
@@ -40,9 +40,9 @@ spec:
             - values.yaml
           values: |
             front:
-              image: registry.inulogic.binboum.eu/argo-test/front:{{.branch}}@{{ .serviceData.digestFront }}
+              image: hub.docker.com/repositories/yairaba/front:2
             back:
-              image: registry.inulogic.binboum.eu/argo-test/back:{{.branch}}@{{ .serviceData.digestBack }}
+              image: hub.docker.com/repositories/yairaba/back:1
       project: default
       syncPolicy:
         automated:
