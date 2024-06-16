@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: fb-matrix
-  namespace: argo-system
 spec:
   goTemplate: true
   generators:
@@ -20,18 +19,19 @@ spec:
               requeueAfterSeconds: 30
           - plugin:
               configMapRef: 
-                name:  cm-plugin
+                name:  argocd-plugin-cm
               input:
                 parameters:
-                  repo: "argo-test"
-                  branch: "{{.branch}}"
+                  repositories:
+                    - repo: "argo-test"
+                      branches: ['{{.branch}}']
               requeueAfterSeconds: 10
   template:
     metadata:
       name: "fb-matrix-{{.branch}}"
     spec:
       source:
-        repoURL: "git@github.com:yairaba/argo-test.git"
+        repoURL: "https://github.com/yairaba/argo-test.git"
         targetRevision: "HEAD"
         path: charts/app-client
         helm:
